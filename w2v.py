@@ -3,6 +3,9 @@ from pprint import pprint
 from nltk.tokenize import word_tokenize
 
 file_location = input("Enter the full path to your corpus: ")
+threads = input("How many threads do you want to use: ")
+filename = input("Enter the name of the file: ")
+name = str(filename) + '.wv'
 
 with open(file_location, 'r', encoding='utf-8') as myfile:
     documents = [i for i in myfile.readlines()]
@@ -60,16 +63,13 @@ print('[x]: 3-grams: Check')
 # Creating the model
 print('[ ]: Model: Initializing...')
 model = gensim.models.Word2Vec([t for t in trigram[bigram[texts]]]
-                               , sg=1, window=15, negative=10, size=300, workers=8)
+                               , sg=1, window=15, negative=10, size=300, workers=int(threads))
 print('[x]: Model is complete!')
-print('[!]: DO NOT forget to save the model')
 
-print('[ ]: Saving Model (deprecated format)')
-model.save('simplewiki.w2v')
-print('[x]: Saved Model (deprecated format)')
 print('[ ]: Saving Model')
-model.wv.save_word2vec_format('simplewiki.wv')
+model.wv.save_word2vec_format(name)
 print('[x]: Saved Model')
 
 print('[!]: Testing the model...')
 print('[!]: The lexical similarity between man and woman is: ', str(model.wv.similarity('man', 'woman')))
+print('[x]: DONE!')
